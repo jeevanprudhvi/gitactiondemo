@@ -33,7 +33,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: >
-            const issueNumber = context.payload.pull_request.number;
+            const prNumber = context.payload.pull_request.number;
 
             const filePath = 'update/recordsrp.txt';
 
