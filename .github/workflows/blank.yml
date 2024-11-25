@@ -1,4 +1,4 @@
-name: Check File and Add Comment
+name: Security Incident Macroponent Maintenance Check
 'on':
   pull_request:
     types:
@@ -13,12 +13,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
       - name: Fetch all branches
-        run: git fetch --all
+        run: git fetch origin main
       - name: Check for specific file
         id: check_file
         run: >
