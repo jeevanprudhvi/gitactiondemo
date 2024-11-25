@@ -19,7 +19,7 @@ jobs:
       - name: Check for specific file
         id: check_file
         run: >
-          if git diff --name-only origin/main...HEAD | grep -q
+          if git diff --name-only main | grep -q
           "update/recordsrp.txt"; then
             echo "file_present=true" >> $GITHUB_ENV
           else
