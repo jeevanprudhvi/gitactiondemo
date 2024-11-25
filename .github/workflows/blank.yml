@@ -4,6 +4,9 @@ name: Check File and Add Comment
     types:
       - opened
       - synchronize
+permissions:
+  contents: write
+  pull-requests: write
 jobs:
   check-file:
     runs-on: ubuntu-latest
