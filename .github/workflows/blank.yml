@@ -30,8 +30,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: >
-            const {github } = require('@actions/github');
-
             const issueNumber = context.payload.pull_request.number;
 
             const filePath = 'update/recordsrp.txt';
