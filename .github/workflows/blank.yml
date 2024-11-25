@@ -37,13 +37,26 @@ jobs:
 
             const filePath = 'update/recordsrp.txt';
 
-            const comment = `The file \`${filePath}\` is present in this pull
-            request. Please review it.`;
-
-
-            await github.rest.issues.createComment({
+            const files = await github.rest.pulls.listFiles({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: issueNumber,
-              body: comment,
+              pull_number: prNumber,
             });
+
+            const targetFile = files.data.find(file => file.filename ===
+            filePath);
+
+            if (targetFile) {
+              // Create a review comment on the specific file
+              await github.rest.pulls.createReviewComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              body: "Please review this file as it has specific implications.",
+              commit_id: context.payload.pull_request.head.sha,
+              path: targetFile.filename,
+              side: "RIGHT", // Add to the right side (HEAD)
+              line: 1 // Line to comment on (adjust as needed)
+            }); } else {
+              console.log(`File ${filePath} not found in the pull request.`);
+            }
