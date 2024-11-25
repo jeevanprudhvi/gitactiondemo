@@ -1,8 +1,28 @@
-name: hello-world
-'on': push
+name: PR Comment for Specific File
+'on':
+  pull_request:
+    types:
+      - opened
+      - synchronize
 jobs:
-  my-job:
+  check-file-and-comment:
     runs-on: ubuntu-latest
     steps:
-      - name: my-step
-        run: echo "Hello World!"
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Check if specific file is present
+        id: check_file
+        run: >
+          # Replace 'update/recordsrp.txt'
+
+          if git diff --name-only ${{ github.event.pull_request.base.sha }}..${{
+          github.sha }} | grep -q "path/to/specific_file.txt"; then
+            echo "file_found=true" >> $GITHUB_ENV
+          else
+            echo "file_found=false" >> $GITHUB_ENV
+          fi
+      - name: Comment on PR
+        if: env.file_found == 'true'
+        uses: actions/github-script@v6
+        with:
+          script: "github.rest.issues.createComment({\n  owner: context.repo.owner,\n  repo: context.repo.repo,\n  issue_number: context.payload.pull_request.number,\n  body: \"\U0001F4C4 The file `path/to/specific_file.txt` has been modified in this PR. Please review its changes carefully.\"\n})\n"
